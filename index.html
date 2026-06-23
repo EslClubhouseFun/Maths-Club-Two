@@ -89,7 +89,6 @@ body{
 .world .emoji{font-size:56px;line-height:1;}
 .world .name{font-size:clamp(24px,4vw,32px);font-weight:700;margin-top:4px;}
 .world .desc{font-size:16px;font-weight:500;opacity:.95;margin-top:2px;}
-.world .stars{margin-top:12px;font-size:20px;letter-spacing:2px;min-height:24px;}
 .foot{font-size:14px;color:var(--ink);opacity:.7;font-weight:500;text-align:center;margin-top:6px;}
 
 /* ---------- GAME PLAY ---------- */
@@ -104,17 +103,25 @@ body{
   padding:6px 14px;min-height:0;gap:16px;}
 
 /* two big panels (more/less + same-or-different image pair) */
-.panels{display:flex;gap:18px;width:100%;max-width:820px;height:100%;align-items:stretch;}
+.mlwrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;width:100%;height:100%;}
+.panels{display:flex;gap:18px;width:100%;max-width:820px;flex:1;min-height:0;align-items:stretch;}
 .panel{flex:1;background:var(--card);border-radius:28px;border:6px solid #e7eefc;
   box-shadow:0 8px 0 var(--shadow);cursor:pointer;position:relative;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:14px;transition:transform .1s,border-color .15s;overflow:hidden;}
+  padding:14px 14px 12px;transition:transform .1s,border-color .15s;overflow:hidden;}
 .panel:active{transform:scale(.98);}
-.panel.right{border-color:#ffe6c2;}
+.panel.right{border-color:#e7eefc;}
 .panel.correct{border-color:var(--more);background:#eafff8;animation:pop .4s;}
-.panel.wrong{animation:shake .4s;}
+.panel.wrong{border-color:var(--less);}
+.panel.choosable{animation:invite 1.5s ease-in-out infinite;}
+@keyframes invite{0%,100%{box-shadow:0 8px 0 var(--shadow);}
+  50%{box-shadow:0 8px 0 var(--shadow),0 0 0 7px rgba(74,168,255,.30);}}
+.countbox{display:flex;align-items:center;gap:8px;margin-top:8px;flex:0 0 auto;
+  font-weight:700;color:var(--ink);font-size:clamp(18px,3.2vw,24px);}
+.countlbl{opacity:.65;}
 .grid{display:flex;flex-wrap:wrap;gap:8px 6px;align-items:center;align-content:center;
-  justify-content:center;width:100%;flex:1;max-width:340px;}
+  justify-content:center;width:100%;flex:1;min-height:0;max-width:340px;}
 .grid .it{font-size:clamp(32px,8vw,64px);line-height:1.05;}
 .numbadge{position:absolute;top:8px;left:8px;background:var(--blue);color:#fff;
   width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;
@@ -129,7 +136,7 @@ body{
   cursor:pointer;transition:transform .1s,border-color .15s;}
 .oddcell:active{transform:scale(.97);}
 .oddcell.correct{border-color:var(--more);background:#eafff8;animation:pop .4s;}
-.oddcell.wrong{animation:shake .4s;border-color:var(--less);}
+.oddcell.wrong{border-color:var(--less);}
 
 /* same/different big pair + answer buttons */
 .sdwrap{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;}
@@ -146,7 +153,7 @@ body{
 .sdbtn.diff{background:linear-gradient(135deg,#ff9bb3,#ff6f93);}
 .sdbtn .ic{font-size:26px;margin-right:6px;}
 .sdbtn.chosen-ok{outline:5px solid #2e9e7f;}
-.sdbtn.chosen-no{animation:shake .4s;}
+.sdbtn.chosen-no{outline:4px solid #ff6f93;outline-offset:2px;}
 
 /* week 4 — addition "how many altogether?" */
 .addwrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -164,7 +171,7 @@ body{
   background:linear-gradient(135deg,#9ce06a,#52bf3a);box-shadow:0 7px 0 #3f9e2a;transition:transform .1s;}
 .choice:active{transform:translateY(4px);box-shadow:0 2px 0 #3f9e2a;}
 .choice.correct{outline:6px solid #2e9e7f;animation:pop .4s;}
-.choice.wrong{animation:shake .4s;opacity:.4;}
+.choice.wrong{opacity:.4;}
 .choice:disabled{opacity:.35;}
 
 /* week 4 — compare two addition amounts (with sum entry) */
@@ -180,10 +187,10 @@ body{
 .blank{min-width:50px;height:54px;padding:0 8px;border-radius:14px;border:3px dashed #b9c6e0;
   background:#f3f8ff;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;
   color:#9aa7c0;cursor:pointer;transition:transform .1s,border-color .15s,background .15s;}
-.blank.active{border-style:solid;border-color:var(--gold);background:#fff8ea;color:var(--ink);
-  box-shadow:0 0 0 4px rgba(255,184,48,.28);}
+.blank.active{border-style:solid;border-color:#8fbfff;background:#f3f8ff;color:var(--ink);
+  box-shadow:0 0 0 3px rgba(74,168,255,.22);}
 .blank.filled{border-style:solid;border-color:var(--more);background:#eafff8;color:#2e9e7f;cursor:default;}
-.blank.bad{animation:shake .4s;border-color:var(--less);background:#fff0f4;}
+.blank.bad{border-color:var(--less);background:#fff0f4;}
 .qmark{font-size:clamp(28px,6vw,44px);font-weight:700;color:var(--ink);opacity:.5;align-self:center;
   padding-top:18px;}
 .numpad{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:620px;
@@ -237,6 +244,10 @@ body{
 @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}
   40%{transform:translateX(10px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+#app.shaking{animation:scrShake .45s ease;}
+@keyframes scrShake{0%,100%{transform:translateX(0)}12%{transform:translateX(-8px)}
+  26%{transform:translateX(8px)}40%{transform:translateX(-6px)}54%{transform:translateX(6px)}
+  68%{transform:translateX(-4px)}82%{transform:translateX(3px)}}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;}
 }
@@ -293,21 +304,18 @@ body{
         <span class="emoji">➕</span>
         <div class="name">Adding Up</div>
         <div class="desc">Add the groups. How many altogether?</div>
-        <div class="stars" id="stars4"></div>
       </button>
       <button class="world w5" data-week="5">
         <span class="wk">Week 5</span><br>
         <span class="emoji">🥕</span>
         <div class="name">More or Less</div>
         <div class="desc">Which group has more? Which has less?</div>
-        <div class="stars" id="stars5"></div>
       </button>
       <button class="world w6" data-week="6">
         <span class="wk">Week 6</span><br>
         <span class="emoji">🎂</span>
         <div class="name">Same or Different</div>
         <div class="desc">Find the one that is different.</div>
-        <div class="stars" id="stars6"></div>
       </button>
     </div>
     <div class="foot">Tap a world to play! 🔊 Turn sound on for the questions.</div>
@@ -370,9 +378,17 @@ function tone(freq,start,dur,type,vol){
   o.start(t); o.stop(t+dur+0.02);
 }
 function sndGood(){ tone(523,0,.13,'triangle',.2); tone(659,.1,.13,'triangle',.2); tone(784,.2,.22,'triangle',.22); }
+function sndCorrect(){ tone(523.25,0,.12,'triangle',.22); tone(659.25,.10,.12,'triangle',.22); tone(783.99,.20,.14,'triangle',.24); tone(1046.5,.32,.30,'triangle',.26); tone(1568,.34,.30,'sine',.10); }
 function sndTry(){ tone(330,0,.16,'sine',.16); tone(247,.13,.2,'sine',.16); }
 function sndStar(){ tone(880,0,.1,'triangle',.18); tone(1175,.09,.18,'triangle',.18); }
 function sndTap(){ tone(420,0,.06,'square',.08); }
+function wrongFx(){
+  sndTry();
+  try{ if(navigator.vibrate) navigator.vibrate([70,40,70]); }catch(e){}
+  var app=document.getElementById('app');
+  if(app){ app.classList.remove('shaking'); void app.offsetWidth; app.classList.add('shaking');
+    setTimeout(function(){ app.classList.remove('shaking'); },480); }
+}
 
 /* ---------- Speech (offline TTS) ---------- */
 var VOICE=null;
@@ -406,11 +422,7 @@ function show(scr){ ['home','game','win'].forEach(function(id){ $(id).classList.
 function getStars(week){ try{ return parseInt(localStorage.getItem('mld_stars_'+week)||'0',10); }catch(e){ return 0; } }
 function setStars(week,n){ try{ localStorage.setItem('mld_stars_'+week,n); }catch(e){} }
 function starRow(n,max){ var s=''; for(var i=0;i<max;i++) s+= i<n?'⭐':'☆'; return s; }
-function renderHomeStars(){
-  $('stars4').textContent = getStars(4)>0 ? '⭐ Best: '+getStars(4) : '';
-  $('stars5').textContent = getStars(5)>0 ? '⭐ Best: '+getStars(5) : '';
-  $('stars6').textContent = getStars(6)>0 ? '⭐ Best: '+getStars(6) : '';
-}
+function renderHomeStars(){ /* personal-best display removed for a cleaner home screen */ }
 
 /* =========================================================================
    ROUND DATA
@@ -511,47 +523,98 @@ function makeGrid(item,count){
   return g;
 }
 function renderMoreLess(pa, r){
-  var wrap=document.createElement('div'); wrap.className='panels';
-  // randomise which side holds which count
   var sides = Math.random()<0.5 ? [r.a,r.b] : [r.b,r.a];
   var big = Math.max(r.a,r.b), small=Math.min(r.a,r.b);
   var correctVal = (r.type==='more') ? big : small;
 
+  $('qtext').textContent = 'Count each group. Tap the number. 🔢';
+
+  var wrap=document.createElement('div'); wrap.className='mlwrap';
+  var panels=document.createElement('div'); panels.className='panels';
+
+  var P=[];
   [0,1].forEach(function(k){
     var count=sides[k];
     var p=document.createElement('div'); p.className='panel'+(k===1?' right':'');
-    var badge=document.createElement('div'); badge.className='numbadge'; badge.textContent=count;
-    p.appendChild(badge);
     p.appendChild(makeGrid(r.item,count));
-    p.addEventListener('click',function(){ chooseMoreLess(p, count, correctVal, r, wrap); });
-    wrap.appendChild(p);
+    var box=document.createElement('div'); box.className='countbox';
+    var lbl=document.createElement('span'); lbl.className='countlbl'; lbl.textContent='I count';
+    var blank=document.createElement('div'); blank.className='blank'; blank.textContent='?';
+    box.appendChild(lbl); box.appendChild(blank);
+    p.appendChild(box);
+    var obj={el:p, blank:blank, count:count, done:false};
+    p.addEventListener('click',function(){ onPanel(obj); });
+    P.push(obj);
+    panels.appendChild(p);
   });
+
+  var hi=Math.max(8, big+1);
+  var pad=document.createElement('div'); pad.className='numpad';
+  for(var n=1;n<=hi;n++){ (function(v){
+    var key=document.createElement('button'); key.className='numkey'; key.textContent=v;
+    key.addEventListener('click',function(){ onNum(v); });
+    pad.appendChild(key);
+  })(n); }
+
+  var cue=document.createElement('div'); cue.className='cmpcue';
+
+  wrap.appendChild(panels); wrap.appendChild(pad); wrap.appendChild(cue);
   pa.appendChild(wrap);
 
-  var qt = (r.type==='more') ? 'Which group has more? '+r.item : 'Which group has less? '+r.item;
-  $('qtext').textContent = qt;
-  setTimeout(function(){ say(r.type==='more'?'Which group has more?':'Which group has less?'); },180);
-}
-function chooseMoreLess(panel, count, correctVal, r, wrap){
-  if(state.locked) return;
-  sndTap();
-  // reveal numbers on both panels to support counting/number recognition
-  var panels=wrap.children;
-  for(var i=0;i<panels.length;i++) panels[i].classList.add('show-num');
-  if(count===correctVal){
-    state.locked=true;
-    panel.classList.add('correct');
-    award();
-    var frame = numWord(correctVal).charAt(0).toUpperCase()+numWord(correctVal).slice(1)+' is '+r.type+'!';
-    showFB('ok', count+' '+r.item+' is '+r.type+'!');
-    say(frame, nextSoon);
-  }else{
-    panel.classList.add('wrong');
-    sndTry();
-    showFB('try','Try again!');
-    say(r.type==='more'?'Try again. Find more.':'Try again. Find less.');
-    setTimeout(function(){ panel.classList.remove('wrong'); },450);
+  var active=0, comparing=false;
+  setActive(0);
+  function setActive(i){ active=i; P.forEach(function(o,idx){ o.blank.classList.toggle('active', idx===i && !o.done); }); }
+  function firstUndone(){ for(var i=0;i<P.length;i++){ if(!P[i].done) return i; } return -1; }
+
+  function onPanel(o){
+    if(comparing){ choose(o); }
+    else if(!o.done){ setActive(P.indexOf(o)); }
   }
+  function onNum(v){
+    if(comparing) return;
+    sndTap();
+    if(P[active].done){ var f=firstUndone(); if(f<0) return; setActive(f); }
+    var o=P[active];
+    if(v===o.count){
+      o.blank.textContent=v; o.blank.classList.remove('active','bad'); o.blank.classList.add('filled');
+      o.done=true; sndStar();
+      var f2=firstUndone();
+      if(f2<0) ready2(); else setActive(f2);
+    }else{
+      o.blank.classList.add('bad'); wrongFx();
+      showFB('try','Count again! 🔢'); say('Count again.');
+      setTimeout(function(){ o.blank.classList.remove('bad'); },450);
+    }
+  }
+  function ready2(){
+    comparing=true;
+    hideFB();
+    pad.classList.add('done');
+    $('qtext').textContent = (r.type==='more') ? 'Which group has more?' : 'Which group has less?';
+    P.forEach(function(o){ o.el.classList.add('choosable'); });
+    cue.textContent='You found '+P[0].count+' and '+P[1].count+'. Now tap the group with '+r.type+' 👇';
+    cue.classList.add('show');
+    say('You found '+numWord(P[0].count)+', and '+numWord(P[1].count)+'. Which group has '+r.type+'?');
+  }
+  function choose(o){
+    if(state.locked) return;
+    sndTap();
+    if(o.count===correctVal){
+      state.locked=true;
+      o.el.classList.remove('choosable'); o.el.classList.add('correct');
+      award();
+      var frame = cap(numWord(correctVal))+' is '+r.type+'!';
+      showFB('ok', o.count+' '+r.item+' is '+r.type+'!');
+      say(frame, nextSoon);
+    }else{
+      o.el.classList.add('wrong'); wrongFx();
+      showFB('try', r.type==='more'?'Look again — find more!':'Look again — find less!');
+      say(r.type==='more'?'Try again. Find more.':'Try again. Find less.');
+      setTimeout(function(){ o.el.classList.remove('wrong'); },450);
+    }
+  }
+
+  setTimeout(function(){ say('Count each group, and tap the number.'); },180);
 }
 
 /* ---------- WEEK 6 : SAME / DIFFERENT ---------- */
@@ -580,7 +643,7 @@ function chooseOdd(cell, i, r){
     say('Yes! It is different!', nextSoon);
   }else{
     cell.classList.add('wrong');
-    sndTry();
+    wrongFx();
     showFB('try','That one is the same. Try again!');
     say('That one is the same. Try again.');
     setTimeout(function(){ cell.classList.remove('wrong'); },450);
@@ -615,7 +678,7 @@ function chooseSD(btn, pickedSame, r){
     else { showFB('ok','No, they are different!'); say('No, different!', nextSoon); }
   }else{
     btn.classList.add('chosen-no');
-    sndTry();
+    wrongFx();
     showFB('try','Look again! Try again.');
     say('Look again. Try again.');
     setTimeout(function(){ btn.classList.remove('chosen-no'); },450);
@@ -670,7 +733,7 @@ function chooseAdd(btn, val, r, total){
     say(numWord(r.a)+' plus '+numWord(r.b)+' is '+numWord(total)+'. '+cap(numWord(total))+' altogether!', nextSoon);
   }else{
     btn.classList.add('wrong'); btn.disabled=true;
-    sndTry();
+    wrongFx();
     showFB('try','Try again. Count them all!');
     say('Try again. Count them all.');
   }
@@ -738,7 +801,7 @@ function renderCmp(pa, r){
       else { setActive(doneA?'B':'A'); }
     }else{
       blank.classList.add('bad');
-      sndTry();
+      wrongFx();
       showFB('try','Count again! 🔢');
       say('Count again.');
       setTimeout(function(){ blank.classList.remove('bad'); },450);
@@ -746,6 +809,7 @@ function renderCmp(pa, r){
   }
   function ready(){
     comparing=true;
+    hideFB();
     pad.classList.add('done');
     btns.classList.remove('locked');
     $('qtext').textContent='Is the amount the same or different?';
@@ -764,7 +828,7 @@ function renderCmp(pa, r){
       else { showFB('ok','Different! '+lt+' and '+rt+' are not equal.'); say('No, different! '+numWord(lt)+' and '+numWord(rt)+' are not the same.', nextSoon); }
     }else{
       btn.classList.add('chosen-no');
-      sndTry();
+      wrongFx();
       showFB('try','Look at the two numbers. Try again!');
       say('Look at the two numbers. Try again.');
       setTimeout(function(){ btn.classList.remove('chosen-no'); },450);
@@ -788,7 +852,7 @@ function makeCmpTray(item,x,y){
 }
 
 /* ---------- shared round end ---------- */
-function award(){ state.stars++; updateLiveStars(); sndStar(); burst(); }
+function award(){ state.stars++; updateLiveStars(); sndCorrect(); burst(); }
 function nextSoon(){ setTimeout(nextRound, 950); }
 function nextRound(){
   state.idx++;
